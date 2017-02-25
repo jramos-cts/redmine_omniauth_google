@@ -36,9 +36,14 @@ class RedmineOauthController < AccountController
   end
 
   def try_to_login info
-   params[:back_url] = session[:back_url]
-   session.delete(:back_url)
-   user = User.joins(:email_addresses).where(:email_addresses => { :address => info["email"] }).first_or_create
+    params[:back_url] = session[:back_url]
+    session.delete(:back_url)
+    # Backward compatibility code for :email_addresses
+    if User.method_defined?(:email_addresses)
+      user = User.joins(:email_addresses).where(:email_addresses => { :address => info["email"] }).first_or_create
+    else
+      user = User.find_or_initialize_by(:mail => info["email"])
+    end
     if user.new_record?
       # Self-registration off
       redirect_to(home_url) && return unless Setting.self_registration?
@@ -69,6 +74,8 @@ class RedmineOauthController < AccountController
     else
       # Existing record
       if user.active?
+        # Ensure last login time gets updated on login
+        user.update_column(:last_login_on, Time.now)
         successful_authentication(user)
       else
         # Redmine 2.4 adds an argument to account_pending

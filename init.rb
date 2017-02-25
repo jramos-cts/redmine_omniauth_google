@@ -15,4 +15,8 @@ Redmine::Plugin.register :redmine_omniauth_google do
     :oauth_autentification => false,
     :allowed_domains => ""
   }, :partial => 'settings/google_settings'
+
+  # Disable self-registration menu item - this is only for google users
+  # Note: that's an incomplete solution, because the user can access the registration page manually
+  delete_menu_item :account_menu, :register
 end
