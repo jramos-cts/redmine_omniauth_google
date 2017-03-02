@@ -8,9 +8,9 @@ Download the plugin and install required gems:
 
 ```console
 cd /path/to/redmine/plugins
-git clone https://github.com/twinslash/redmine_omniauth_google.git
+git clone https://github.com/jramos-cts/redmine_omniauth_google.git
 cd /path/to/redmine
-bundle install
+bundle install --no-deployment
 ```
 
 Restart the app
@@ -48,7 +48,7 @@ To authenticate via Google you must first register your redmine instance via the
 Users can now to use their Google Account to log in to your instance of Redmine.
 
 Additionaly
-* Setup value Autologin in Settings on tab Authentification
+* Setup value Autologin in Settings on tab Authentication
 
 ### Other options
 
